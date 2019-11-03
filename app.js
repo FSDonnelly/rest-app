@@ -5,13 +5,44 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static('public'));
 app.use(express.json());
 
-app.get(`/users/2`, (req, res) => {
-  res.send({ id: 2, login: `Nancy`, age: 20 });
+let users = [];
+let id = 1;
+
+app.get(`/users/:id`, (req, res) => {
+  let user = getUserById(req.params.id);
+  res.send(user);
 });
 
 app.post(`/users`, (req, res) => {
-  console.log(req.body);
+  let newUser = req.body;
+  newUser.id = id;
+  id++;
+  users.push(newUser);
   res.send(`Created!`);
 });
+
+app.put(`/users/:id`, (req, res) => {
+  let user = getUserById(req.params.id);
+  if (!user) {
+    res.send(`Rejected`);
+  } else {
+    let data = req.body;
+    for (const key in data) {
+      user[key] = data[key];
+    }
+    res.send(`Updated!`);
+  }
+});
+
+getUserById = id => {
+  id = +id;
+  for (let i = 0; i < users.length; i++) {
+    const el = users[i];
+    if (el.id === id) {
+      return el;
+    }
+  }
+  return null;
+};
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
