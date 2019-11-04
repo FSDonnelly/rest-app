@@ -10,7 +10,11 @@ let id = 1;
 
 app.get(`/users/:id`, (req, res) => {
   let user = getUserById(req.params.id);
-  res.send(user);
+  if (!user) {
+    res.send(`Rejected`);
+  } else {
+    res.send(user);
+  }
 });
 
 app.post(`/users`, (req, res) => {
@@ -31,6 +35,16 @@ app.put(`/users/:id`, (req, res) => {
       user[key] = data[key];
     }
     res.send(`Updated!`);
+  }
+});
+
+app.delete(`/users/:id`, (req, res) => {
+  let user = getUserById(req.params.id);
+  if (user) {
+    users.splice(users.indexOf(user), 1);
+    res.send(`Deleted`);
+  } else {
+    res.send(`Rejected!`);
   }
 });
 
