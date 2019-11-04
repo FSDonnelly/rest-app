@@ -10,11 +10,7 @@ let id = 1;
 
 app.get(`/users/:id`, (req, res) => {
   let user = getUserById(req.params.id);
-  if (!user) {
-    res.send(`Rejected`);
-  } else {
-    res.send(user);
-  }
+  res.send(user);
 });
 
 app.post(`/users`, (req, res) => {
